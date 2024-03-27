@@ -38,7 +38,7 @@ const saveUser = (req, resp, next) => {
                                 type: userDto.type
                             },
                             process.env.JWT_SECRET,
-                            { expiresIn: "1h" }
+                            { expiresIn: "3h" }
                         );
                     } catch (err) {
                         const error =
@@ -89,7 +89,7 @@ const loginUser = (req, resp, next) => {
                                 type: existingUser.type
                             },
                             process.env.JWT_SECRET,
-                            { expiresIn: "1h" }
+                            { expiresIn: "3h" }
                         );
                     } catch (err) {//token error
                         console.log(err);

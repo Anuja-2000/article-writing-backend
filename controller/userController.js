@@ -29,7 +29,7 @@ const getAllUsers = (req, res) => {
 }
 
 const getAllWriters = (req,res) => {
-    User.find({ type: "Writer" }).then(result => {
+    User.find({ type: "Writer" }).sort({savedAt:-1}).then(result => {
         res.status(200).json(result);
     }).catch(error => {
         res.status(500).json(error);
@@ -37,7 +37,7 @@ const getAllWriters = (req,res) => {
 }
 
 const getAllReaders = (req, res) => {
-    User.find({ type: "Reader" }).then(result => {
+    User.find({ type: "Reader" }).sort({savedAt:-1}).then(result => {
         res.status(200).json(result);
     }).catch(error => {
         res.status(500).json(error);

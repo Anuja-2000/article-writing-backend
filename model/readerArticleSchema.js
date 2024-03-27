@@ -6,6 +6,7 @@ const ReaderArticleSchema = new mongoose.Schema({
    image:{type: String, require: true},
    profilePic:{type: String, require: true},
    writer:{type: String, require: true},
+   userId:{type: String, require: true},
    date:{type: Date, require: true,default: Date.now()},
    time:{type: String, require: true},
    likes:{type: Number, require: true},
