@@ -3,17 +3,19 @@ const bcrypt = require('bcrypt'); //encrypting user pws
 const jwt = require('jsonwebtoken');
 
 const saveUser = (req, resp, next) => {
+  bcrypt.hash(req.body.password, 10).then((hash) => {
+    const userDto = new User({
+      userId: req.body.userId,
+      email: req.body.email,
+      name: req.body.name,
+      type: req.body.type,
+      password: hash,
+      savedAt: Date.now(),
+      imgUrl: "",
+    });
+  });
+};
 
-    bcrypt.hash(req.body.password, 10).then(hash => {
-        const userDto = new User({
-            userId: req.body.userId,
-            email: req.body.email,
-            name: req.body.name,
-            type: req.body.type,
-            password: hash,
-            savedAt: Date.now(),
-            imgUrl:""
-        });
 const { generateFromEmail } = require("unique-username-generator");
 var passwordGenerator = require("generate-password");
 const sendEmail = require("../util/sendEmail");
@@ -359,4 +361,4 @@ module.exports = {
   saveNewAdmin,
   saveNewUserAsAdmin,
   deactivateUser
-};
+}
