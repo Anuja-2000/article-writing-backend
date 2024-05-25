@@ -93,8 +93,46 @@ const getApprovalHistory = (req, resp) => {
     });
 };
 
+const getApprovalCount = (req, resp) => {
+  const userId = req.user.userId;
+  const agg = [
+    {
+      $match:{
+        adminId: userId
+      }
+    },
+    {
+      $group:{
+        _id: "$status",
+        count:{
+          $count: {}
+        }
+      }
+    }
+  ]
+  Approval.aggregate(agg)
+    .then((result) => {
+      let count = {
+        approved: 0,
+        rejected: 0
+      }
+      result.forEach((element) => {
+        if(element._id === "approved"){
+          count.approved = element.count
+        }else{
+          count.rejected = element.count
+        }
+      });
+      resp.status(200).json(count);
+    })
+    .catch((error) => {
+      resp.status(500).json(error);
+    });
+};
+
 module.exports = {
   saveApproval,
   getApprovalByArticleId,
   getApprovalHistory,
+  getApprovalCount,
 };

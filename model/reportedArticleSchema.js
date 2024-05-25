@@ -6,6 +6,7 @@ const reportedArticleSchema = new mongoose.Schema({
     time:{type: Date, require: true,default: Date.now},
     articleId:{type: String, require: true},
     writerId:{type: String, require: true},
+    status: { type: String, default: "approved" }
 },{ collection: 'reportedArticles' });
 
 

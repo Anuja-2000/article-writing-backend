@@ -22,4 +22,6 @@ router.patch('/:articleId', articleController.updateArticle);
 // Route to delete an article
 router.delete('/:articleId', articleController.deleteArticle);
 
+router.patch('/reportArticle/:articleId', articleController.reportArticle);
+router.get('/reportedArticles/get', articleController.getReportedArticles);
 module.exports = router;

@@ -16,6 +16,7 @@ const auth = require('./middleware/auth');
 const admin = require('./middleware/admin');
 const authRoutes = require('./route/authRoutes');
 const followRoutes = require('./route/followRoute');
+const likeRoutes = require('./route/likeRoutes');
 const reportedArticle = require('./route/reportedArticleRoute');
 const approvalRoutes = require('./route/articleApprovalRoute');
 const reportedWriter = require('./route/reportedWriterRoute');
@@ -58,6 +59,7 @@ app.use('/api/flaggedTopics', auth, flaggedTopicRoute);
 app.use('/api/article', auth, article)
 app.use('/api/file', fileRoutes)
 app.use('/api/follow', auth, followRoutes)
+app.use('/api/like',likeRoutes)
 app.use('/api/approval', auth, admin, approvalRoutes)
 
 app.listen(PORT, () => {
