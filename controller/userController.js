@@ -1,3 +1,4 @@
+
 const User = require('../model/userSchema'); 
 const bcrypt = require('bcrypt'); //encrypting user pws
 const jwt = require('jsonwebtoken');
@@ -15,7 +16,6 @@ const saveUser = (req, resp, next) => {
     });
   });
 };
-
 const { generateFromEmail } = require("unique-username-generator");
 var passwordGenerator = require("generate-password");
 const sendEmail = require("../util/sendEmail");
