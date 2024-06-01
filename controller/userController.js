@@ -191,6 +191,7 @@ const getAllOtherUsers = (req, res) => {
   ];
   User.aggregate(query)
     .then((result) => {
+      result = result.filter((user) => user.isActive !== false);
       res.status(200).json(result);
     })
     .catch((error) => {
