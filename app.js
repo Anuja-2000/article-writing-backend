@@ -20,6 +20,7 @@ const likeRoutes = require('./route/likeRoutes');
 const reportedArticle = require('./route/reportedArticleRoute');
 const approvalRoutes = require('./route/articleApprovalRoute');
 const reportedWriter = require('./route/reportedWriterRoute');
+const notificationRoute = require('./route/notificationsRoute');
 
 const dotenv = require('dotenv');
 dotenv.config();
@@ -61,6 +62,7 @@ app.use('/api/file', fileRoutes)
 app.use('/api/follow', auth, followRoutes)
 app.use('/api/like',likeRoutes)
 app.use('/api/approval', auth, admin, approvalRoutes)
+app.use('/api/notification', notificationRoute);
 
 app.listen(PORT, () => {
   console.log(`listening on port ${PORT}`);
