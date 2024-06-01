@@ -58,7 +58,7 @@ app.use('/api/reportedWriter', reportedWriter);
 app.use('/api/flaggedTopics', auth, flaggedTopicRoute);
 app.use('/api/article', auth, article)
 app.use('/api/file', fileRoutes)
-app.use('/api/follow', auth, followRoutes)
+app.use('/api/follow', followRoutes)
 app.use('/api/like',likeRoutes)
 app.use('/api/approval', auth, admin, approvalRoutes)
 
