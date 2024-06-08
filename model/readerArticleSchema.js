@@ -7,7 +7,8 @@ const ReaderArticleSchema = new mongoose.Schema({
    userId:{type: String, require: true},
    updatedAt:{type: Date, require: true},
    likes:{type: Number, require: true},
-   tags:{type: [String], require: true}
+   tags:{type: [String], require: true},
+   view:{type: Number, require: true},
 },{ collection: 'articles' });
 
 ReaderArticleSchema.virtual('formattedDateTime').get(function () {

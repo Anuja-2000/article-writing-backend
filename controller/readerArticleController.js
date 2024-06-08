@@ -62,6 +62,22 @@ const updateLikesReaderArticle = (req, resp) => {
     });
 };
 
+const updateView = (req, resp) => {
+  ReaderArticle.updateOne(
+    { articleId: req.body.id },
+    {
+      view: req.body.view,
+     
+    }
+  )
+    .then((result) => {
+      resp.status(201).json(result);
+    })
+    .catch((error) => {
+      resp.status(500).json(error);
+    });
+};
+
 const getReaderArticle = (req, resp) => {
   const id = req.body.id;
   ReaderArticle.findOne({ articleId: id })
@@ -235,5 +251,6 @@ module.exports = {
   getArticleAndWriterDataByGivenDomain,
   getWriterPopularity,
   updateLikesReaderArticle,
-  getReaderArticleById
+  getReaderArticleById,
+  updateView
 };
