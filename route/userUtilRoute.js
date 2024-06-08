@@ -3,7 +3,7 @@ const userController = require('../controller/userController');
 const auth = require('../middleware/auth');
 const router = express.Router();
 
-
+router.get('/get-signup-count',userController.signupCountByMonth);
 router.get('/count',userController.getUserCount);
 router.get('/get-writers',userController.getAllWriters);
 router.get('/get-readers',userController.getAllReaders);

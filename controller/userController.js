@@ -328,6 +328,97 @@ const deactivateUser = (req, res) => {
     });
 };
 
+const signupCountByMonth = (req, res) => {
+  let date = new Date();
+  let month = date.getMonth();
+  const monthDigits = [
+    "01",
+    "02",
+    "03",
+    "04",
+    "05",
+    "06",
+    "07",
+    "08",
+    "09",
+    "10",
+    "11",
+    "12",
+  ];
+  User.aggregate([
+    {
+      '$group': {
+        '_id': {
+          'year': {
+            '$year': '$savedAt'
+          }, 
+          'month': {
+            '$month': '$savedAt'
+          }, 
+          'type': '$type'
+        }, 
+        'count': {
+          '$sum': 1
+        }
+      }
+    }, {
+      '$sort': {
+        '_id.year': 1, 
+        '_id.month': 1
+      }
+    }, {
+      '$limit': 36
+    }
+  ])
+    .then((result) => {
+      let graphData = [];
+      result.map((data) => {
+        let month = data._id.month;
+        let year = data._id.year;
+        let type = data._id.type;
+        let count = data.count;
+        let obj = {
+          year: year,
+          month: month,
+          [type]: count,
+        };
+        graphData.push(obj);
+      });
+      const final = convertToMUIChartDataFormat(graphData);
+      res.status(200).json(final);
+    })
+    .catch((error) => {
+      res.status(500).json(error);
+    });
+};
+
+const months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+
+const convertToMUIChartDataFormat = (data) => {
+  const result = [];
+
+    data.forEach(item => {
+        const year = item.year;
+        const month = item.month;
+        const monthName = months[month - 1];
+        const dateString = `${year} - ${monthName}`;
+
+        let existing = result.find(obj => obj.Date === dateString);
+
+        if (!existing) {
+            existing = { Date: dateString, Reader: 0, Writer: 0, Admin: 0 };
+            result.push(existing);
+        }
+
+        Object.keys(item).forEach(key => {
+            if (key !== 'year' && key !== 'month') {
+                existing[key] = item[key];
+            }
+        });
+    });
+
+    return result;
+};
 
 module.exports = {
   updateUser,
@@ -345,5 +436,6 @@ module.exports = {
   getAllOtherUsers,
   saveNewAdmin,
   saveNewUserAsAdmin,
-  deactivateUser
+  deactivateUser,
+  signupCountByMonth
 };
