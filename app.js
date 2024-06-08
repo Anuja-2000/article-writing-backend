@@ -16,6 +16,7 @@ const auth = require('./middleware/auth');
 const admin = require('./middleware/admin');
 const authRoutes = require('./route/authRoutes');
 const followRoutes = require('./route/followRoute');
+const viewRoutes = require('./route/viewRoutes');
 const likeRoutes = require('./route/likeRoutes');
 const reportedArticle = require('./route/reportedArticleRoute');
 const approvalRoutes = require('./route/articleApprovalRoute');
@@ -63,6 +64,7 @@ app.use('/api/follow', followRoutes)
 app.use('/api/like',likeRoutes)
 app.use('/api/approval', auth, admin, approvalRoutes)
 app.use('/api/notification', notificationRoute);
+app.use('/api/view', viewRoutes)
 
 app.listen(PORT, () => {
   console.log(`listening on port ${PORT}`);
