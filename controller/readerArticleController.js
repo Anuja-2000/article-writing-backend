@@ -216,6 +216,8 @@ const getWriterPopularity = (req, resp) => {
 
   ReaderArticle.aggregate(agg)
     .then((result) => {
+      result = result.sort((a, b) => b.count - a.count);
+      result = result.slice(0, 5);
       resp.status(200).json(result);
     })
     .catch((error) => {
