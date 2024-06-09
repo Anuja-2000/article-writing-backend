@@ -1,5 +1,6 @@
 const express = require('express');
 const followController = require('../controller/followController');
+const auth = require('../middleware/auth')
 const admin = require('../middleware/admin');
 
 const router = express.Router();
@@ -18,7 +19,7 @@ router.delete('/delete', followController.deleteFollowWriter)
 router.delete('/deleteId', followController.deleteFollowWriterById)
 router.get('/getAll', followController.getAllFollowWriter)
 router.get('/search', followController.searchFollowWriter)
-router.get('/popular-writers', admin, followController.getPopularWriters)
+router.get('/popular-writers',auth, admin, followController.getPopularWriters)
 router.get('/count/:writerId', followController.countFollowersForWriter)
 
 module.exports = router;
