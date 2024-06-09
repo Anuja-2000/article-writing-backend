@@ -170,6 +170,24 @@ const getPopularWriters = (req, resp) => {
       resp.status(500).json(error);
     });
 };
+const countFollowersForWriter = (req, resp) => {
+  const { writerId } = req.params;
+
+  if (!writerId) {
+    return resp.status(400).json({ error: "Missing writerId" });
+  }
+
+  followWriter
+    .countDocuments({ writerId })
+    .then((count) => {
+      resp.status(200).json({ writerId, count });
+    })
+    .catch((error) => {
+      console.error('Error counting followers:', error);
+      resp.status(500).json({ error: "Internal server error" });
+    });
+};
+
 
 module.exports = {
   saveFollowWriter,
@@ -180,4 +198,5 @@ module.exports = {
   deleteFollowWriterById,
   getFollowWriterById,
   getPopularWriters,
+  countFollowersForWriter
 };

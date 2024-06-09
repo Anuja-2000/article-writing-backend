@@ -26,7 +26,7 @@ const updateComment=(req,resp)=>{
     });
 }
 const getComment=(req,resp)=>{
-    Comment.find({artId:req.headers.id}).then(result=>{
+    Comment.find({artId:req.body.id}).then(result=>{
         resp.status(200).json(result);
     }).catch(error=>{
        resp.status(500).json(error);

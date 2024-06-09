@@ -39,7 +39,7 @@ const saveUser = (req, resp, next) => {
                                 type: userDto.type
                             },
                             process.env.JWT_SECRET,
-                            { expiresIn: "3h" }
+                            { expiresIn: "6h" }
                         );
                     } catch (err) {
                         const error =
