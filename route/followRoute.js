@@ -19,5 +19,6 @@ router.delete('/deleteId', followController.deleteFollowWriterById)
 router.get('/getAll', followController.getAllFollowWriter)
 router.get('/search', followController.searchFollowWriter)
 router.get('/popular-writers', admin, followController.getPopularWriters)
+router.get('/count/:writerId', followController.countFollowersForWriter)
 
 module.exports = router;

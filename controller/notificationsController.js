@@ -24,6 +24,9 @@ const getNotifications = (req, res) => {
   Notifications.find()
     .sort({ savedAt: -1 })
     .then((result) => {
+      result = result.filter((notification) => {
+        return notification.markedAsRead === false;
+      });
       res.status(200).json(result);
     })
     .catch((error) => {
@@ -32,7 +35,7 @@ const getNotifications = (req, res) => {
 };
 
 const markAsRead = (req, res) => {
-  let { notificationId } = req.params.id;
+  let  notificationId  = req.params.id;
   Notifications.findOneAndUpdate(
     { notificationId: notificationId },
     { markedAsRead: true }
