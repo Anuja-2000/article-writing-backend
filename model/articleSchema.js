@@ -20,8 +20,8 @@ const ArticleSchema = new mongoose.Schema(
       default: 0,
     },
     userId: {
-      type: mongoose.Schema.Types.ObjectId, // Reference to the User schema
-      ref: "User",
+      /*type: mongoose.Schema.Types.ObjectId, // Reference to the User schema*/
+      type: String,
       require: true,
     },
     status: {
@@ -31,6 +31,18 @@ const ArticleSchema = new mongoose.Schema(
     },
     savedType: {
       type: String, // draft, saved, trashed, deleted
+    },
+    viewCount:{
+      type: Number,
+      default: 0,
+    },
+    keyWords:{
+      type: String,
+      default: "",
+    },
+    domain:{
+      type: String,
+      default: "",
     },
     coverImage: {
       type: String,
