@@ -141,6 +141,11 @@ const searchReaderArticle = (req, resp) => {
 const getArticleCountByDomain = (req, resp) => {
   const agg = [
     {
+      $sort: {
+        domain: 1
+      },
+    },
+    {
       $group: {
         _id: "$domain",
         count: {
