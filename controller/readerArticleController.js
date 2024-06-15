@@ -150,6 +150,7 @@ const searchReaderArticle = (req, resp) => {
       }
     ],
   })
+    .sort({ viewCount: -1 })
     .then((result) => {
       resp.status(200).json(result);
     })
