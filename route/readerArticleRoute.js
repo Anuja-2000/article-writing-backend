@@ -15,7 +15,7 @@ const admin = require('../middleware/admin');
 
 router.post('/save', readerArticleController.saveReaderArticle)
 router.put('/updateLikes', readerArticleController.updateLikesReaderArticle)
-router.put('/updateViews', readerArticleController.upda teView)
+router.put('/updateViews', readerArticleController.updateView)
 router.post('/get', readerArticleController.getReaderArticle)
 router.get('/getById/:articleId', readerArticleController.getReaderArticleById)
 router.delete('/delete', readerArticleController.deleteReaderArticle)

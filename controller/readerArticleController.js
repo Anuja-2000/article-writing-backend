@@ -66,7 +66,7 @@ const updateView = (req, resp) => {
   ReaderArticle.updateOne(
     { articleId: req.body.id },
     {
-      view: req.body.view,
+      viewCount: req.body.viewCount,
      
     }
   )
@@ -124,10 +124,15 @@ const getAllReaderArticle = (req, resp) => {
 
 const searchReaderArticle = (req, resp) => {
   ReaderArticle.find({
-    $or: [
-      { content: { $regex: req.headers.text, $options: "i" } },
-      { title: { $regex: req.headers.text, $options: "i" } },
-      { tags: { $regex: req.headers.text, $options: "i" } },
+    $and: [
+      { status: "approved" }, // Ensure it matches the specific domain
+      {
+        $or: [
+          { content: { $regex: req.headers.text, $options: "i" } },
+          { title: { $regex: req.headers.text, $options: "i" } },
+          { tags: { $regex: req.headers.text, $options: "i" } },
+        ],
+      }
     ],
   })
     .then((result) => {

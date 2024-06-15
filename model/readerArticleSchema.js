@@ -8,7 +8,9 @@ const ReaderArticleSchema = new mongoose.Schema({
    updatedAt:{type: Date, require: true},
    likes:{type: Number, require: true},
    tags:{type: [String], require: true},
-   view:{type: Number, require: true},
+   viewCount:{type: Number, require: true},
+   domain:{type: String,default: ""},
+   status: {type: String,default: "pending",} // pending, approved, rejected
 },{ collection: 'articles' });
 
 ReaderArticleSchema.virtual('formattedDateTime').get(function () {
