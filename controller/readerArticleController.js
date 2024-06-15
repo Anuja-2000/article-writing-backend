@@ -88,6 +88,21 @@ const getReaderArticle = (req, resp) => {
       resp.status(500).json(error);
     });
 };
+
+const getPopularArticles = (req, resp) => {
+    const limit = 20;
+
+    ReaderArticle.find({status: "approved"})
+      .sort({ viewCount: -1 })
+      .limit(limit)
+      .then((result) => {
+        resp.status(200).json(result);
+      })
+      .catch((error) => {
+        resp.status(500).json({ error: error.message });
+      });
+};
+
 const getReaderArticleById = (req, resp) => {
   const articleId = req.params.articleId; 
   ReaderArticle.findOne({ articleId: articleId })
@@ -262,5 +277,6 @@ module.exports = {
   getWriterPopularity,
   updateLikesReaderArticle,
   getReaderArticleById,
-  updateView
+  updateView,
+  getPopularArticles
 };
