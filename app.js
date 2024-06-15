@@ -1,5 +1,6 @@
 const express = require("express");
 const mongoose = require("mongoose");
+
 const app = express();
 const UserRoute = require('./route/userRoute');
 const ContactMessageRoute = require('./route/contactMessageRoute');
@@ -63,7 +64,7 @@ app.use('/api/file', fileRoutes)
 app.use('/api/follow', followRoutes)
 app.use('/api/like',likeRoutes)
 app.use('/api/approval', auth, admin, approvalRoutes)
-app.use('/api/notification', notificationRoute);
+app.use('/api/notification',auth, notificationRoute);
 app.use('/api/view', viewRoutes)
 
 app.listen(PORT, () => {

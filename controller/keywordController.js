@@ -1,4 +1,5 @@
 const Keyword = require('../model/keywordSchema');
+const googleTrends = require('google-trends-api');
 
 const { v4: uuidv4 } = require('uuid');
 
@@ -33,24 +34,24 @@ const getKeywordCount = async (req, res) => {
 
 const getKeywordsByTopicDomainId = async (req, res) => {
     try {
-      const { topicDomainId } = req.params; 
-      // Query the database to find keywords by topic domain ID
-      const keywords = await Keyword.find({ topicDomainId });
-      res.status(200).json(keywords);
+        const { topicDomainId } = req.params;
+        // Query the database to find keywords by topic domain ID
+        const keywords = await Keyword.find({ topicDomainId });
+        res.status(200).json(keywords);
     } catch (error) {
-      console.error(error);
-      res.status(500).json({ error: 'Internal server error' });
+        console.error(error);
+        res.status(500).json({ error: 'Internal server error' });
     }
 };
 
 const getKeywordsByKeywordId = async (req, res) => {
     try {
-      const { keywordId } = req.params; 
-      const keyword = await Keyword.findOne({ keywordId: keywordId }, { keywordName: 1, _id: 0  });
-      res.status(200).json(keyword);
+        const { keywordId } = req.params;
+        const keyword = await Keyword.findOne({ keywordId: keywordId }, { keywordName: 1, _id: 0 });
+        res.status(200).json(keyword);
     } catch (error) {
-      console.error(error);
-      res.status(500).json({ error: 'Internal server error' });
+        console.error(error);
+        res.status(500).json({ error: 'Internal server error' });
     }
 };
 
@@ -87,7 +88,7 @@ const deleteKeywordByKeyword = async (req, res) => {
 const editKeyword = async (req, res) => {
     try {
         // Extract keyword ID and updated data from request body
-        const {keywordId } = req.params;
+        const { keywordId } = req.params;
         const { topicDomainId, keywordName, description } = req.body;
 
         // Find the  keyword by ID and update it with the new data
@@ -106,7 +107,29 @@ const editKeyword = async (req, res) => {
         res.status(500).json({ error: error.message });
     }
 };
+const getSuggestions = async (req, res) => {
+    const { keyword } = req.params;
+    try {
+        googleTrends.relatedTopics({ keyword: keyword })
+            .then(function (results) {              
+                let data = JSON.parse(results);
 
+                data = data.default.rankedList[0].rankedKeyword.sort((a, b) => b.value - a.value).slice(0, 5);
+                // Extract the titles into an array
+                const topics = data.map(topic => topic.topic.title);
+
+                // Format the result into a JSON string
+                const titles = [...new Set(topics)];
+                const result = { titles };
+                res.status(200).json(result);
+            })
+            .catch(function (err) {
+                console.error(err);
+            })
+    } catch (error) {
+        res.status(500).json({ error: error.message });
+    }
+};
 
 // Export the controller functions
 module.exports = {
@@ -117,5 +140,6 @@ module.exports = {
     deleteKeywordByKeyword,
     editKeyword,
     getKeywords,
-    getKeywordsByKeywordId
+    getKeywordsByKeywordId,
+    getSuggestions
 };
