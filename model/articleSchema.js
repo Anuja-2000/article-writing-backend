@@ -46,7 +46,7 @@ const ArticleSchema = new mongoose.Schema(
     },
     coverImage: {
       type: String,
-      default: "https://picsum.photos/500/300?random=1",
+      default: "https://ibb.co/kyj3PN8",
     },
     image1: {
       type: String,
