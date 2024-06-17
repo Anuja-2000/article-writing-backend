@@ -328,6 +328,25 @@ const deactivateUser = (req, res) => {
     });
 };
 
+const activateUser = (req, res) => {
+  const { writerId } = req.params;
+
+  User.findOneAndUpdate(
+    { userId: writerId, isActive: false},
+    { isActive: true },
+    { new: true } 
+  )
+    .then((updatedUser) => {
+      if (!updatedUser) {
+        return res.status(404).json({ message: "User not found" });
+      }
+      res.status(200).json({ message: "User activated successfully", user: updatedUser });
+    })
+    .catch((error) => {
+      res.status(500).json({ message: "Error activating user", error: error });
+    });
+};
+
 const signupCountByMonth = (req, res) => {
   let date = new Date();
   let month = date.getMonth();
@@ -437,5 +456,6 @@ module.exports = {
   saveNewAdmin,
   saveNewUserAsAdmin,
   deactivateUser,
-  signupCountByMonth
+  signupCountByMonth,
+  activateUser 
 };

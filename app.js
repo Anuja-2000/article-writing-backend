@@ -22,6 +22,7 @@ const likeRoutes = require('./route/likeRoutes');
 const reportedArticle = require('./route/reportedArticleRoute');
 const approvalRoutes = require('./route/articleApprovalRoute');
 const reportedWriter = require('./route/reportedWriterRoute');
+const deactivatedWriter = require('./route/deactivatedWriterRoute');
 const notificationRoute = require('./route/notificationsRoute');
 
 const dotenv = require('dotenv');
@@ -60,13 +61,14 @@ app.use('/api/readerArticle', readerArticle);
 app.use('/api/comment', comment);
 app.use('/api/reportArticle', reportedArticle);
 app.use('/api/reportedWriter', reportedWriter);
+app.use('/api/deactivatedWriter', deactivatedWriter);
 app.use('/api/flaggedTopics', auth, flaggedTopicRoute);
 app.use('/api/article', auth, article)
 app.use('/api/file', fileRoutes)
 app.use('/api/follow', followRoutes)
 app.use('/api/like',likeRoutes)
 app.use('/api/approval', auth, admin, approvalRoutes)
-app.use('/api/notification',auth, notificationRoute);
+app.use('/api/notification', notificationRoute);
 app.use('/api/view', viewRoutes)
 
 app.listen(PORT, () => {
