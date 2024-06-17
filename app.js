@@ -31,7 +31,9 @@ dotenv.config();
 const bodyParser = require('body-parser')
 
 const PORT = 3001;
-app.use(bodyParser.json());
+// Increase the payload size limit
+app.use(bodyParser.json({ limit: '50mb' }));
+app.use(bodyParser.urlencoded({ limit: '50mb', extended: true }));
 
 var cors = require('cors');
 const flaggedTopicSchema = require("./model/flaggedTopicSchema"); //not used
