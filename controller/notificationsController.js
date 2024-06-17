@@ -9,6 +9,8 @@ const createNotification = (req, res) => {
     title: title,
     message: message,
     type: type,
+    savedAt: new Date(),
+    markedAsRead: false,
   });
   notification
     .save()
