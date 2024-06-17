@@ -9,5 +9,5 @@ router.get('/getAll',userController.getAllUsers);
 router.get('/:userId',userController.getOneUser);
 router.patch('/updateName',userController.updateDisplayName);
 router.patch('/deactivateUser/:writerId', userController.deactivateUser);
-
+router.patch('/activateUser/:writerId', userController.activateUser);
 module.exports = router;
