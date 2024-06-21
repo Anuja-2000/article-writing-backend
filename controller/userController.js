@@ -439,6 +439,16 @@ const convertToMUIChartDataFormat = (data) => {
     return result;
 };
 
+const deleteUser = (req, resp) => {
+  User.deleteOne({ userId: req.body.userId })
+    .then((result) => {
+      resp.status(200).json(result);
+    })
+    .catch((error) => {
+      resp.status(500).json(error);
+    });
+};
+
 module.exports = {
   updateUser,
   updateUserImg,
@@ -457,5 +467,6 @@ module.exports = {
   saveNewUserAsAdmin,
   deactivateUser,
   signupCountByMonth,
-  activateUser 
+  activateUser,
+  deleteUser 
 };
