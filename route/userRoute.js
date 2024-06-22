@@ -10,5 +10,5 @@ router.get('/:userId',userController.getOneUser);
 router.patch('/updateName',userController.updateDisplayName);
 router.patch('/deactivateUser/:writerId', userController.deactivateUser);
 router.patch('/activateUser/:writerId', userController.activateUser);
-router.delete('/deleteUser', userController.deleteUser);
+router.patch('/deactiveUser', userController.deactiveUser);
 module.exports = router;
