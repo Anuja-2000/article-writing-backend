@@ -439,8 +439,11 @@ const convertToMUIChartDataFormat = (data) => {
     return result;
 };
 
-const deleteUser = (req, resp) => {
-  User.deleteOne({ userId: req.body.userId })
+const deactiveUser = (req, resp) => {
+  User.updateOne(
+    { userId: req.body.userId },
+    { isDeactived: true}
+  )
     .then((result) => {
       resp.status(200).json(result);
     })
@@ -468,5 +471,5 @@ module.exports = {
   deactivateUser,
   signupCountByMonth,
   activateUser,
-  deleteUser 
+  deactiveUser 
 };
