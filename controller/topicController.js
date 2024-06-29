@@ -129,20 +129,33 @@ const editTopic = async (req, res) => {
 };
 
 // Function to get topics by topic domain ID and keyword ID
-const getTopicsByDomainAndKeyword = async (req, res) => {
+
+const getTopicsByDomainAndKeywords = async (req, res) => {
     try {
-        const { topicDomainId, keywordId } = req.params; // Extract topic domain ID and keyword ID from request parameters
-  
-        // Query the database to find topics by topic domain ID and keyword ID
-        const topics = await Topic.find({ topicDomainId, keywordId });
-        res.status(200).json(topics);
+        const { topicDomainId, keywordIds } = req.params; 
+        const keywordIdsArray = keywordIds.split(',');
+        const topics = await Topic.find({ 
+            topicDomainId: topicDomainId,
+            keywordId: { $in: keywordIdsArray }
+        });
+        const response = {};
+        topics.forEach(topic => {
+            if (!response[topic.keywordId]) {
+                response[topic.keywordId] = [];
+            }
+            response[topic.keywordId].push({
+                topicId: topic.topicId,
+                topicName: topic.topicName,
+                description: topic.description
+            });
+        });
+
+        res.status(200).json(response);
     } catch (error) {
         console.error(error);
         res.status(500).json({ error: 'Internal server error' });
     }
 };
-
-
 module.exports = {
     createTopic,
     getTopicCount,
@@ -151,7 +164,7 @@ module.exports = {
     deleteTopicByTopics,
     getAllTopics,
     editTopic,
-    getTopicsByDomainAndKeyword,
+    getTopicsByDomainAndKeywords,
     getTopicsByKeyword,
     getTopicDetails
     

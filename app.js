@@ -1,5 +1,6 @@
 const express = require("express");
 const mongoose = require("mongoose");
+
 const app = express();
 const UserRoute = require('./route/userRoute');
 const ContactMessageRoute = require('./route/contactMessageRoute');
@@ -21,6 +22,7 @@ const likeRoutes = require('./route/likeRoutes');
 const reportedArticle = require('./route/reportedArticleRoute');
 const approvalRoutes = require('./route/articleApprovalRoute');
 const reportedWriter = require('./route/reportedWriterRoute');
+const deactivatedWriter = require('./route/deactivatedWriterRoute');
 const notificationRoute = require('./route/notificationsRoute');
 
 const dotenv = require('dotenv');
@@ -29,7 +31,9 @@ dotenv.config();
 const bodyParser = require('body-parser')
 
 const PORT = 3001;
-app.use(bodyParser.json());
+// Increase the payload size limit
+app.use(bodyParser.json({ limit: '50mb' }));
+app.use(bodyParser.urlencoded({ limit: '50mb', extended: true }));
 
 var cors = require('cors');
 const flaggedTopicSchema = require("./model/flaggedTopicSchema"); //not used
@@ -51,13 +55,14 @@ app.use('/api/contactMessage', ContactMessageRoute);
 
 app.use('/api/topicDomains', auth, topicDomainRoute);
 
-app.use('/api/topics', auth, topicRoutes);
+app.use('/api/topics', topicRoutes);
 app.use('/api/keywords', auth, keywordRoutes);
 app.use('/api/readerArticle', readerArticle);
 app.use('/api/comment', comment);
 app.use('/api/reportArticle', reportedArticle);
 app.use('/api/reportedWriter', reportedWriter);
-app.use('/api/flaggedTopics', auth, flaggedTopicRoute);
+app.use('/api/deactivatedWriter', deactivatedWriter);
+app.use('/api/flaggedTopics', flaggedTopicRoute);
 app.use('/api/article', auth, article)
 app.use('/api/file', fileRoutes)
 app.use('/api/follow', followRoutes)

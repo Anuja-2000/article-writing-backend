@@ -11,4 +11,5 @@ router.get('/get/:topicDomainId', keywordController.getKeywordsByTopicDomainId);
 router.patch('/edit/:keywordId', keywordController.editKeyword);
 router.delete('/:topicDomainId', keywordController.deleteKeyword);
 router.delete('/delete/:keywordId', keywordController.deleteKeywordByKeyword);
+router.get('/suggestions/:keyword', keywordController.getSuggestions);
 module.exports = router;

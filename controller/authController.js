@@ -74,13 +74,71 @@ const saveUser = (req, resp, next) => {
 
 }
 
+const saveWriter = async (req, resp, next) => {
+    try {
+        // Hash the password
+        const hash = await bcrypt.hash(req.body.password, 10);
+
+        // Check if the user already exists
+        const existingUsers = await User.find({ email: req.body.email, name: req.body.name });
+
+        if (existingUsers.length > 0) {
+            return resp.status(409).json({ message: "Username & email already exist" });
+        }
+
+        // Create new user
+        const userDto = new User({
+            userId: req.body.userId,
+            email: req.body.email,
+            name: req.body.name,
+            displayName: req.body.name,
+            type: req.body.type,
+            password: hash,
+            savedAt: Date.now(),
+            imgUrl: ""
+        });
+
+        // Save the user to the database
+        await userDto.save();
+
+        // Generate JWT token
+        const token = jwt.sign(
+            {
+                userId: userDto.userId,
+                username: userDto.name,
+                email: userDto.email,
+                type: userDto.type
+            },
+            process.env.JWT_SECRET,
+            { expiresIn: "6h" }
+        );
+
+        // Respond with success
+        return resp.status(201).json({
+            success: true,
+            data: {
+                userId: userDto.userId,
+                username: userDto.name,
+                email: userDto.email,
+                type: userDto.type,
+                token: token
+            }
+        });
+
+    } catch (error) {
+        console.error(error);
+        return next(error);
+    }
+};
+
+
 const loginUser = (req, resp, next) => {
     let { username, email, password } = req.body;
 
     User.findOne({ name: username, email: email }).then(existingUser => {
         if (existingUser) {
             // Check if the account is active
-            if (!existingUser.isActive) {
+            if (!existingUser.isActive || existingUser.isDeactived) {
                 return resp.status(403).json({ message: "Account is deactivated" });
             }
             bcrypt.compare(password, existingUser.password).then(result => {
@@ -163,6 +221,7 @@ const sendEmailToResetPassowrd = async (req, resp) => {
 
 module.exports = {
     saveUser,
+    saveWriter,
     loginUser,
     sendEmailToResetPassowrd
 }
