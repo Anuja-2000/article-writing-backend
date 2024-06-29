@@ -13,10 +13,5 @@ const ReaderArticleSchema = new mongoose.Schema({
    status: {type: String,default: "pending",} // pending, approved, rejected
 },{ collection: 'articles' });
 
-ReaderArticleSchema.virtual('formattedDateTime').get(function () {
-   const formattedDate = this.date.toISOString().split('T')[1];
-   return `${formattedDate} ${this.time}`;
-});
-
 module.exports = mongoose.model('articleData', ReaderArticleSchema);
 
