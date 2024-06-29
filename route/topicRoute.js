@@ -30,7 +30,7 @@ router.get('/:topicDomainId', topicController.getTopicsByTopicDomainId);
 router.patch('/edit/:topicId', topicController.editTopic);
 router.delete('/:topicDomainId', topicController.deleteTopicsByTopicDomain);
 router.delete('/delete/:topicId', topicController.deleteTopicByTopics);
-router.get('/get/:topicDomainId/:keywordId', topicController.getTopicsByDomainAndKeyword);
+router.get('/get/:topicDomainId/:keywordIds', topicController.getTopicsByDomainAndKeywords);
 router.get('/getByKeyword/:keywordId', topicController.getTopicsByKeyword);
 router.get('/getByTopic/:topicId', topicController.getTopicDetails);
 

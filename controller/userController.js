@@ -452,6 +452,29 @@ const deactiveUser = (req, resp) => {
     });
 };
 
+const restoreUser = (req, resp) => {
+  User.updateOne(
+    { userId: req.body.userId },
+    { isDeactived: false}
+  )
+    .then((result) => {
+      resp.status(200).json(result);
+    })
+    .catch((error) => {
+      resp.status(500).json(error);
+    });
+};
+
+const getDeactivedUsers = (req, resp) => {
+  User.find({ isDeactived: true })
+    .then((result) => {
+      resp.status(200).json(result);
+    })
+    .catch((error) => {
+      resp.status(500).json(error);
+    });
+}
+
 module.exports = {
   updateUser,
   updateUserImg,
@@ -471,5 +494,7 @@ module.exports = {
   deactivateUser,
   signupCountByMonth,
   activateUser,
-  deactiveUser 
+  deactiveUser,
+  restoreUser,
+  getDeactivedUsers
 };
