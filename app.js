@@ -55,14 +55,14 @@ app.use('/api/contactMessage', ContactMessageRoute);
 
 app.use('/api/topicDomains', auth, topicDomainRoute);
 
-app.use('/api/topics', auth, topicRoutes);
+app.use('/api/topics', topicRoutes);
 app.use('/api/keywords', auth, keywordRoutes);
 app.use('/api/readerArticle', readerArticle);
 app.use('/api/comment', comment);
 app.use('/api/reportArticle', reportedArticle);
 app.use('/api/reportedWriter', reportedWriter);
 app.use('/api/deactivatedWriter', deactivatedWriter);
-app.use('/api/flaggedTopics', auth, flaggedTopicRoute);
+app.use('/api/flaggedTopics', flaggedTopicRoute);
 app.use('/api/article', auth, article)
 app.use('/api/file', fileRoutes)
 app.use('/api/follow', followRoutes)
