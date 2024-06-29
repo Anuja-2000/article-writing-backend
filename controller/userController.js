@@ -439,6 +439,42 @@ const convertToMUIChartDataFormat = (data) => {
     return result;
 };
 
+const deactiveUser = (req, resp) => {
+  User.updateOne(
+    { userId: req.body.userId },
+    { isDeactived: true}
+  )
+    .then((result) => {
+      resp.status(200).json(result);
+    })
+    .catch((error) => {
+      resp.status(500).json(error);
+    });
+};
+
+const restoreUser = (req, resp) => {
+  User.updateOne(
+    { userId: req.body.userId },
+    { isDeactived: false}
+  )
+    .then((result) => {
+      resp.status(200).json(result);
+    })
+    .catch((error) => {
+      resp.status(500).json(error);
+    });
+};
+
+const getDeactivedUsers = (req, resp) => {
+  User.find({ isDeactived: true })
+    .then((result) => {
+      resp.status(200).json(result);
+    })
+    .catch((error) => {
+      resp.status(500).json(error);
+    });
+}
+
 module.exports = {
   updateUser,
   updateUserImg,
@@ -457,5 +493,8 @@ module.exports = {
   saveNewUserAsAdmin,
   deactivateUser,
   signupCountByMonth,
-  activateUser 
+  activateUser,
+  deactiveUser,
+  restoreUser,
+  getDeactivedUsers
 };
