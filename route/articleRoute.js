@@ -13,6 +13,9 @@ router.get('/pending', articleController.getPendingArticles);
 // Route to get articles by writerId
 router.get('/writer/:writerId', articleController.getArticlesByWriterId);
 
+// Route to get article count by writerId
+router.get('/count/:writerId', articleController.getArticleCountByWriterId);
+
 // Route to get an article by its ID
 router.get('/:articleId', articleController.getArticleById);
 
