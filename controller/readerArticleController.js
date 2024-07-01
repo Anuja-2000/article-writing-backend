@@ -137,15 +137,28 @@ const getAllReaderArticle = (req, resp) => {
     });
 };
 
+const getUniqueDomains = (req, resp) => {
+  ReaderArticle.distinct('domain')
+    .then((domains) => {
+      resp.status(200).json(domains);
+    })
+    .catch((error) => {
+      resp.status(500).json({ error: 'Failed to retrieve unique domains', details: error });
+    });
+};
+
 const searchReaderArticle = (req, resp) => {
+  console.log(req.body.domain);
+  const domainFilter = req.body.domain == 'All' ? {} : { domain: req.body.domain };
   ReaderArticle.find({
     $and: [
-      { status: "approved" }, // Ensure it matches the specific domain
+      { status: "approved" },
+      domainFilter, // Ensure it matches the specific domain
       {
         $or: [
-          { content: { $regex: req.headers.text, $options: "i" } },
-          { title: { $regex: req.headers.text, $options: "i" } },
-          { tags: { $regex: req.headers.text, $options: "i" } },
+          { content: { $regex: req.body.text, $options: "i" } },
+          { title: { $regex: req.body.text, $options: "i" } },
+          { tags: { $regex: req.body.text, $options: "i" } },
         ],
       }
     ],
@@ -279,5 +292,6 @@ module.exports = {
   updateLikesReaderArticle,
   getReaderArticleById,
   updateView,
-  getPopularArticles
+  getPopularArticles,
+  getUniqueDomains
 };
