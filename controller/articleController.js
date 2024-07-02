@@ -4,7 +4,8 @@ const Article = require("../model/articleSchema");
 // Controller function to create a new article
 exports.createArticle = async (req, res) => {
   try {
-    const { articleId, userId, title, content, savedType, coverImage } = req.body;
+    const { articleId, userId, title, content, savedType, coverImage } =
+      req.body;
 
     const article = new Article({
       articleId,
@@ -14,7 +15,7 @@ exports.createArticle = async (req, res) => {
       likes: 0,
       status: "pending",
       savedType,
-      coverImage, 
+      coverImage,
     });
 
     await article.save();
@@ -30,6 +31,23 @@ exports.getAllArticles = async (req, res) => {
   try {
     const articles = await Article.find().populate("userId", "name email");
     res.status(200).json({ success: true, articles });
+  } catch (error) {
+    res.status(500).json({ success: false, error: error.message });
+  }
+};
+
+// controller to get the article count by writerId
+exports.getArticleCountByWriterId = async (req, res) => {
+  try {
+    const { writerId } = req.params;
+    const articleCount = await Article.find({ userId: writerId }).count();
+    if (!articleCount) {
+      return res
+        .status(404)
+        .json({ success: false, error: "No articles found for this writer" });
+    }
+
+    res.status(200).json(articleCount);
   } catch (error) {
     res.status(500).json({ success: false, error: error.message });
   }
@@ -179,24 +197,32 @@ exports.reportArticle = async (req, res) => {
     const { articleId } = req.params;
     const updatedArticle = await Article.updateOne(
       { articleId: articleId },
-      { $set: { status: 'reported' } }
+      { $set: { status: "reported" } }
     );
 
     if (updatedArticle.nModified === 0) {
-      return res.status(404).json({ success: false, error: 'Article not found or already reported' });
+      return res
+        .status(404)
+        .json({
+          success: false,
+          error: "Article not found or already reported",
+        });
     }
 
-    res.status(200).json({ success: true, message: 'Article status updated to reported' });
+    res
+      .status(200)
+      .json({ success: true, message: "Article status updated to reported" });
   } catch (error) {
     res.status(500).json({ success: false, error: error.message });
   }
 };
 exports.getReportedArticles = async (req, res) => {
   try {
-    const reportedArticles = await Article.find({ status: 'reported' }).populate("userId", "name email");
+    const reportedArticles = await Article.find({
+      status: "reported",
+    }).populate("userId", "name email");
     res.status(200).json({ success: true, reportedArticles });
   } catch (error) {
     res.status(500).json({ success: false, error: error.message });
   }
 };
-
