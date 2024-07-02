@@ -24,6 +24,7 @@ const approvalRoutes = require('./route/articleApprovalRoute');
 const reportedWriter = require('./route/reportedWriterRoute');
 const deactivatedWriter = require('./route/deactivatedWriterRoute');
 const notificationRoute = require('./route/notificationsRoute');
+const articleDomainRoute = require('./route/articleDomainRoute');
 
 const dotenv = require('dotenv');
 dotenv.config();
@@ -70,6 +71,7 @@ app.use('/api/like',likeRoutes)
 app.use('/api/approval', auth, admin, approvalRoutes)
 app.use('/api/notification', notificationRoute);
 app.use('/api/view', viewRoutes)
+app.use('/api/articleDomain',auth, articleDomainRoute);
 
 app.listen(PORT, () => {
   console.log(`listening on port ${PORT}`);
