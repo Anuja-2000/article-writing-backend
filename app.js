@@ -23,6 +23,7 @@ const reportedArticle = require('./route/reportedArticleRoute');
 const approvalRoutes = require('./route/articleApprovalRoute');
 const reportedWriter = require('./route/reportedWriterRoute');
 const deactivatedWriter = require('./route/deactivatedWriterRoute');
+const rejectedArticle= require('./route/rejectedArticleRoute');
 const notificationRoute = require('./route/notificationsRoute');
 const articleDomainRoute = require('./route/articleDomainRoute');
 
@@ -63,6 +64,7 @@ app.use('/api/comment', comment);
 app.use('/api/reportArticle', reportedArticle);
 app.use('/api/reportedWriter', reportedWriter);
 app.use('/api/deactivatedWriter', deactivatedWriter);
+app.use('/api/rejectedArticle', rejectedArticle);
 app.use('/api/flaggedTopics', flaggedTopicRoute);
 app.use('/api/article', auth, article)
 app.use('/api/file', fileRoutes)
