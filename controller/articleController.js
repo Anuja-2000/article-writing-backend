@@ -216,13 +216,31 @@ exports.reportArticle = async (req, res) => {
     res.status(500).json({ success: false, error: error.message });
   }
 };
-exports.getReportedArticles = async (req, res) => {
+
+
+exports.approveArticle = async (req, res) => {
   try {
-    const reportedArticles = await Article.find({
-      status: "reported",
-    }).populate("userId", "name email");
-    res.status(200).json({ success: true, reportedArticles });
+    const { articleId } = req.params;
+    const updatedArticle = await Article.updateOne(
+      { articleId: articleId },
+      { $set: { status: "approved" } }
+    );
+
+    if (updatedArticle.nModified === 0) {
+      return res
+        .status(404)
+        .json({
+          success: false,
+          error: "Article not found or already approved",
+        });
+    }
+
+    res
+      .status(200)
+      .json({ success: true, message: "Article status updated to approved" });
   } catch (error) {
     res.status(500).json({ success: false, error: error.message });
   }
 };
+
+
