@@ -404,6 +404,9 @@ const signupCountByMonth = (req, res) => {
         graphData.push(obj);
       });
       const final = convertToMUIChartDataFormat(graphData);
+      if (final.length > 12) {
+        final.splice(0, final.length - 12);
+      }
       res.status(200).json(final);
     })
     .catch((error) => {
