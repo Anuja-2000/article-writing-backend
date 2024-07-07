@@ -92,53 +92,32 @@ exports.getArticleById = async (req, res) => {
 exports.updateArticle = async (req, res) => {
   try {
     const { articleId } = req.params;
-    const {
-      title,
-      content,
-      likes,
-      userId,
-      status,
-      savedType,
-      coverImage,
-      image1,
-      image2,
-      image3,
-      image4,
-      image5,
-      createdAt,
-      updatedAt,
-      domain,
-    } = req.body;
-    const updatedArticle = await Article.updateOne(
-      { articleId },
+    const { title, content, userId } = req.body;
+
+    // Update the article by articleId
+    const result = await Article.updateOne(
+      { articleId: articleId },
       {
-        title: title,
-        content: content,
-        likes: likes,
-        userId: userId,
-        status: status,
-        savedType: savedType,
-        coverImage: coverImage,
-        image1: image1,
-        image2: image2,
-        image3: image3,
-        image4: image4,
-        image5: image5,
-        createdAt: createdAt,
-        updatedAt: new Date(),
-        domain: domain,
+        $set: {
+          title: title,
+          content: content,
+          userId: userId,
+        },
       }
     );
-    if (!updatedArticle) {
+
+    if (result.nModified === 0) {
       return res
         .status(404)
-        .json({ success: false, error: "Article not found" });
+        .json({ success: false, error: "Article not found or no changes made" });
     }
-    res.status(200).json({ success: true, article: updatedArticle });
+
+    res.status(200).json({ success: true });
   } catch (error) {
     res.status(500).json({ success: false, error: error.message });
   }
 };
+
 
 // Controller function to delete an article
 exports.deleteArticle = async (req, res) => {
@@ -201,12 +180,10 @@ exports.reportArticle = async (req, res) => {
     );
 
     if (updatedArticle.nModified === 0) {
-      return res
-        .status(404)
-        .json({
-          success: false,
-          error: "Article not found or already reported",
-        });
+      return res.status(404).json({
+        success: false,
+        error: "Article not found or already reported",
+      });
     }
 
     res
