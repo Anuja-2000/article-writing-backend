@@ -1,4 +1,4 @@
-const view = require("../model/viewModel");
+const view = require("../model/viewSchema");
 
 const saveViews = (req, resp) => {
 console.log(req.body.readerId);

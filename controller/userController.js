@@ -328,6 +328,25 @@ const deactivateUser = (req, res) => {
     });
 };
 
+const activateUser = (req, res) => {
+  const { writerId } = req.params;
+
+  User.findOneAndUpdate(
+    { userId: writerId, isActive: false},
+    { isActive: true },
+    { new: true } 
+  )
+    .then((updatedUser) => {
+      if (!updatedUser) {
+        return res.status(404).json({ message: "User not found" });
+      }
+      res.status(200).json({ message: "User activated successfully", user: updatedUser });
+    })
+    .catch((error) => {
+      res.status(500).json({ message: "Error activating user", error: error });
+    });
+};
+
 const signupCountByMonth = (req, res) => {
   let date = new Date();
   let month = date.getMonth();
@@ -420,6 +439,42 @@ const convertToMUIChartDataFormat = (data) => {
     return result;
 };
 
+const deactiveUser = (req, resp) => {
+  User.updateOne(
+    { userId: req.body.userId },
+    { isDeactived: true}
+  )
+    .then((result) => {
+      resp.status(200).json(result);
+    })
+    .catch((error) => {
+      resp.status(500).json(error);
+    });
+};
+
+const restoreUser = (req, resp) => {
+  User.updateOne(
+    { userId: req.body.userId },
+    { isDeactived: false}
+  )
+    .then((result) => {
+      resp.status(200).json(result);
+    })
+    .catch((error) => {
+      resp.status(500).json(error);
+    });
+};
+
+const getDeactivedUsers = (req, resp) => {
+  User.find({ isDeactived: true })
+    .then((result) => {
+      resp.status(200).json(result);
+    })
+    .catch((error) => {
+      resp.status(500).json(error);
+    });
+}
+
 module.exports = {
   updateUser,
   updateUserImg,
@@ -437,5 +492,9 @@ module.exports = {
   saveNewAdmin,
   saveNewUserAsAdmin,
   deactivateUser,
-  signupCountByMonth
+  signupCountByMonth,
+  activateUser,
+  deactiveUser,
+  restoreUser,
+  getDeactivedUsers
 };

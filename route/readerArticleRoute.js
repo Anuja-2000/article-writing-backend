@@ -20,9 +20,11 @@ router.post('/get', readerArticleController.getReaderArticle)
 router.get('/getById/:articleId', readerArticleController.getReaderArticleById)
 router.delete('/delete', readerArticleController.deleteReaderArticle)
 router.get('/getAll', readerArticleController.getAllReaderArticle)
-router.get('/search', readerArticleController.searchReaderArticle)
+router.post('/search', readerArticleController.searchReaderArticle)
 router.get('/count-by-domain', auth, admin, readerArticleController.getArticleCountByDomain)
 router.get('/articles-by-domain/:domain', auth, admin, readerArticleController.getArticleAndWriterDataByGivenDomain)
 router.get('/writer-popularity', auth, admin, readerArticleController.getWriterPopularity)
+router.get('/popular-articles',readerArticleController.getPopularArticles)
+router.get('/get-domains',readerArticleController.getUniqueDomains)
 
 module.exports = router;

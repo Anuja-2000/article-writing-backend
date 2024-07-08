@@ -6,6 +6,5 @@ const router = express.Router();
 
 router.post('/save', reportArticleController.saveReported)
 router.get('/get', reportArticleController.getUniqueReportedArticleIds);
-router.patch('/reportArticle/:articleId', reportArticleController.changeReportedArticleStatus);
-router.delete('/delete/:writerId',  reportArticleController.deleteReportedArticlesByArticleId);
+router.delete('/delete/:articleId',  reportArticleController.deleteReportedArticlesByArticleId);
 module.exports = router;

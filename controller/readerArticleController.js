@@ -66,7 +66,7 @@ const updateView = (req, resp) => {
   ReaderArticle.updateOne(
     { articleId: req.body.id },
     {
-      view: req.body.view,
+      viewCount: req.body.viewCount,
      
     }
   )
@@ -88,6 +88,21 @@ const getReaderArticle = (req, resp) => {
       resp.status(500).json(error);
     });
 };
+
+const getPopularArticles = (req, resp) => {
+    const limit = 20;
+
+    ReaderArticle.find({status: "approved"})
+      .sort({ viewCount: -1 })
+      .limit(limit)
+      .then((result) => {
+        resp.status(200).json(result);
+      })
+      .catch((error) => {
+        resp.status(500).json({ error: error.message });
+      });
+};
+
 const getReaderArticleById = (req, resp) => {
   const articleId = req.params.articleId; 
   ReaderArticle.findOne({ articleId: articleId })
@@ -122,14 +137,33 @@ const getAllReaderArticle = (req, resp) => {
     });
 };
 
+const getUniqueDomains = (req, resp) => {
+  ReaderArticle.distinct('domain')
+    .then((domains) => {
+      resp.status(200).json(domains);
+    })
+    .catch((error) => {
+      resp.status(500).json({ error: 'Failed to retrieve unique domains', details: error });
+    });
+};
+
 const searchReaderArticle = (req, resp) => {
+  console.log(req.body.domain);
+  const domainFilter = req.body.domain == 'All' ? {} : { domain: req.body.domain };
   ReaderArticle.find({
-    $or: [
-      { content: { $regex: req.headers.text, $options: "i" } },
-      { title: { $regex: req.headers.text, $options: "i" } },
-      { tags: { $regex: req.headers.text, $options: "i" } },
+    $and: [
+      { status: "approved" },
+      domainFilter, // Ensure it matches the specific domain
+      {
+        $or: [
+          { content: { $regex: req.body.text, $options: "i" } },
+          { title: { $regex: req.body.text, $options: "i" } },
+          { tags: { $regex: req.body.text, $options: "i" } },
+        ],
+      }
     ],
   })
+    .sort({ viewCount: -1 })
     .then((result) => {
       resp.status(200).json(result);
     })
@@ -140,6 +174,11 @@ const searchReaderArticle = (req, resp) => {
 
 const getArticleCountByDomain = (req, resp) => {
   const agg = [
+    {
+      $sort: {
+        domain: 1
+      },
+    },
     {
       $group: {
         _id: "$domain",
@@ -252,5 +291,7 @@ module.exports = {
   getWriterPopularity,
   updateLikesReaderArticle,
   getReaderArticleById,
-  updateView
+  updateView,
+  getPopularArticles,
+  getUniqueDomains
 };

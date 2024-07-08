@@ -9,7 +9,8 @@ const userSchema = new mongoose.Schema({
     password: { type: String, required: true },
     savedAt: { type: Date, default: Date.now() },
     isActive: { type: Boolean, default: true },
-    imgUrl: { type: String, default: "" } 
+    imgUrl: { type: String, default: "" },
+    isDeactived: {type:Boolean, default:false} 
 }, { collection: 'userData' });
 
 userSchema.index({ userId: 1 }, { unique: true });

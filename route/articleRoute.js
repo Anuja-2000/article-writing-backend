@@ -32,5 +32,5 @@ router.patch('/update/status', articleController.changeArticleStatus);
 router.delete('/:articleId', articleController.deleteArticle);
 
 router.patch('/reportArticle/:articleId', articleController.reportArticle);
-router.get('/reportedArticles/get', articleController.getReportedArticles);
+router.patch('/approveArticles/:articleId', articleController.approveArticle);
 module.exports = router;
