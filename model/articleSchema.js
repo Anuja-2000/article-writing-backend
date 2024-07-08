@@ -27,7 +27,7 @@ const ArticleSchema = new mongoose.Schema(
     status: {
       type: String,
       // pending, approved, rejected
-      default: "pending",
+      default: "Not Sent for Approval",
     },
     savedType: {
       type: String, // draft, saved, trashed, deleted

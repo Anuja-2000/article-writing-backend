@@ -13,7 +13,7 @@ exports.createArticle = async (req, res) => {
       title,
       content,
       likes: 0,
-      status: "pending",
+      status: "Not Sent for Approval",
       savedType,
       coverImage,
       domain,
@@ -118,6 +118,56 @@ exports.updateArticle = async (req, res) => {
     res.status(500).json({ success: false, error: error.message });
   }
 };
+
+
+//constroller function to change the article status
+exports.changeArticleStatus = async (req, res) => {
+  try {
+    const { articleId, status } = req.body;
+    const updatedArticle = await Article.updateOne(
+      { articleId: articleId },
+      { $set: { status: status } }
+    );
+
+    console.log(updatedArticle);
+
+    if (updatedArticle.nModified === 0) {
+      return res.status(404).json({
+        success: false,
+        error: "Article not found or no changes made",
+      });
+    }
+
+    res.status(200).json({ success: true });
+  }
+  catch (error) {
+    res.status(500).json({ success: false, error: error.message });
+  }
+};
+
+//constroller function to change the article savedType
+exports.changeArticleSavedType = async (req, res) => {
+  try {
+    const { articleId, savedType } = req.body;
+    const updatedArticle = await Article.updateOne(
+      { articleId: articleId },
+      { $set: { savedType: savedType } }
+    );
+
+    if (updatedArticle.nModified === 0) {
+      return res.status(404).json({
+        success: false,
+        error: "Article not found or no changes made",
+      });
+    }
+
+    res.status(200).json({ success: true });
+  }
+  catch (error) {
+    res.status(500).json({ success: false, error: error.message });
+  }
+};
+
 
 
 // Controller function to delete an article
