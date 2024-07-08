@@ -42,7 +42,6 @@ const ArticleSchema = new mongoose.Schema(
     },
     domain:{
       type: String,
-      default: "",
     },
     coverImage: {
       type: String,

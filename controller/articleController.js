@@ -4,7 +4,7 @@ const Article = require("../model/articleSchema");
 // Controller function to create a new article
 exports.createArticle = async (req, res) => {
   try {
-    const { articleId, userId, title, content, savedType, coverImage } =
+    const { articleId, userId, title, content, savedType, coverImage, domain} =
       req.body;
 
     const article = new Article({
@@ -16,6 +16,7 @@ exports.createArticle = async (req, res) => {
       status: "pending",
       savedType,
       coverImage,
+      domain,
     });
 
     await article.save();
