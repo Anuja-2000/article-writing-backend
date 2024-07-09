@@ -38,7 +38,6 @@ app.use(bodyParser.json({ limit: '50mb' }));
 app.use(bodyParser.urlencoded({ limit: '50mb', extended: true }));
 
 var cors = require('cors');
-const flaggedTopicSchema = require("./model/flaggedTopicSchema"); //not used
 app.use(cors());
 
 mongoose.connect(process.env.URI)
