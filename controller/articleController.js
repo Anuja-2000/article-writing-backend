@@ -4,7 +4,7 @@ const Article = require("../model/articleSchema");
 // Controller function to create a new article
 exports.createArticle = async (req, res) => {
   try {
-    const { articleId, userId, title, content, savedType, coverImage, domain} =
+    const { articleId, userId, title, content, savedType, coverImage, domain } =
       req.body;
 
     const article = new Article({
@@ -110,7 +110,10 @@ exports.updateArticle = async (req, res) => {
     if (result.nModified === 0) {
       return res
         .status(404)
-        .json({ success: false, error: "Article not found or no changes made" });
+        .json({
+          success: false,
+          error: "Article not found or no changes made",
+        });
     }
 
     res.status(200).json({ success: true });
@@ -118,7 +121,6 @@ exports.updateArticle = async (req, res) => {
     res.status(500).json({ success: false, error: error.message });
   }
 };
-
 
 //constroller function to change the article status
 exports.changeArticleStatus = async (req, res) => {
@@ -139,8 +141,7 @@ exports.changeArticleStatus = async (req, res) => {
     }
 
     res.status(200).json({ success: true });
-  }
-  catch (error) {
+  } catch (error) {
     res.status(500).json({ success: false, error: error.message });
   }
 };
@@ -162,13 +163,10 @@ exports.changeArticleSavedType = async (req, res) => {
     }
 
     res.status(200).json({ success: true });
-  }
-  catch (error) {
+  } catch (error) {
     res.status(500).json({ success: false, error: error.message });
   }
 };
-
-
 
 // Controller function to delete an article
 exports.deleteArticle = async (req, res) => {
@@ -182,6 +180,7 @@ exports.deleteArticle = async (req, res) => {
     }
     res.status(200).json({ success: true, article: deletedArticle });
   } catch (error) {
+    console.log("Error deleting article:", error);
     res.status(500).json({ success: false, error: error.message });
   }
 };
@@ -245,7 +244,6 @@ exports.reportArticle = async (req, res) => {
   }
 };
 
-
 exports.approveArticle = async (req, res) => {
   try {
     const { articleId } = req.params;
@@ -255,12 +253,10 @@ exports.approveArticle = async (req, res) => {
     );
 
     if (updatedArticle.nModified === 0) {
-      return res
-        .status(404)
-        .json({
-          success: false,
-          error: "Article not found or already approved",
-        });
+      return res.status(404).json({
+        success: false,
+        error: "Article not found or already approved",
+      });
     }
 
     res
@@ -270,5 +266,3 @@ exports.approveArticle = async (req, res) => {
     res.status(500).json({ success: false, error: error.message });
   }
 };
-
-
