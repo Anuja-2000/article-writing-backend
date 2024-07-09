@@ -22,6 +22,12 @@ router.get('/:articleId', articleController.getArticleById);
 // Route to update an existing article
 router.patch('/:articleId', articleController.updateArticle);
 
+// router to change the article savedType
+router.patch('/update/savedType', articleController.changeArticleSavedType);
+
+// router to change the article status
+router.patch('/update/status', articleController.changeArticleStatus);
+
 // Route to delete an article
 router.delete('/:articleId', articleController.deleteArticle);
 
