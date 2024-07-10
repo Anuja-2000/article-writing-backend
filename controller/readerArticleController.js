@@ -92,7 +92,7 @@ const getReaderArticle = (req, resp) => {
 const getPopularArticles = (req, resp) => {
     const limit = 20;
 
-    ReaderArticle.find({status: "approved"})
+    ReaderArticle.find({status: "approved", savedType: "saved" })
       .sort({ viewCount: -1 })
       .limit(limit)
       .then((result) => {
@@ -153,7 +153,7 @@ const searchReaderArticle = (req, resp) => {
   ReaderArticle.find({
     $and: [
       { status: "approved" },
-      {savedType: { $ne: "deleted" } },
+      {savedType: "saved" },
       domainFilter, // Ensure it matches the specific domain
       {
         $or: [
