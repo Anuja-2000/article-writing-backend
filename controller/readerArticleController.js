@@ -260,13 +260,18 @@ const getWriterPopularity = (req, resp) => {
       },
     },
     {
+      $match: {
+        "userData.0": { $exists: true },
+      },
+    },
+    {
       $project: {
         "userData.name": 1,
         "userData.email": 1,
         count: 1,
         _id: 1,
       },
-    }
+    },
   ];
 
   ReaderArticle.aggregate(agg)

@@ -31,6 +31,9 @@ router.patch('/update/status', articleController.changeArticleStatus);
 // Route to delete an article
 router.delete('/:articleId', articleController.deleteArticle);
 
+//router to duplicate articles
+router.post('/duplicate/:articleId', articleController.duplicateArticle);
+
 router.patch('/reportArticle/:articleId', articleController.reportArticle);
 router.patch('/approveArticles/:articleId', articleController.approveArticle);
 module.exports = router;
