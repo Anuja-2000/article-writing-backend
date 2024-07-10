@@ -138,7 +138,7 @@ const getAllReaderArticle = (req, resp) => {
 };
 
 const getUniqueDomains = (req, resp) => {
-  ReaderArticle.distinct('domain')
+  ReaderArticle.distinct('domain', { status: 'approved' })
     .then((domains) => {
       resp.status(200).json(domains);
     })
@@ -153,6 +153,7 @@ const searchReaderArticle = (req, resp) => {
   ReaderArticle.find({
     $and: [
       { status: "approved" },
+      {savedType: { $ne: "deleted" } },
       domainFilter, // Ensure it matches the specific domain
       {
         $or: [
