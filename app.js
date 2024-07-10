@@ -26,7 +26,7 @@ const deactivatedWriter = require('./route/deactivatedWriterRoute');
 const rejectedArticle= require('./route/rejectedArticleRoute');
 const notificationRoute = require('./route/notificationsRoute');
 const articleDomainRoute = require('./route/articleDomainRoute');
-
+const blockedArticleRoute = require('./route/blockedArticleRoute');
 const dotenv = require('dotenv');
 dotenv.config();
 
@@ -73,6 +73,7 @@ app.use('/api/approval', auth, admin, approvalRoutes)
 app.use('/api/notification', notificationRoute);
 app.use('/api/view', viewRoutes)
 app.use('/api/articleDomain',auth, articleDomainRoute);
+app.use('/api/blockedArticle', blockedArticleRoute);
 
 app.listen(PORT, () => {
   console.log(`listening on port ${PORT}`);
