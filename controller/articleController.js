@@ -1,5 +1,6 @@
 const { $Command } = require("@aws-sdk/client-s3");
 const Article = require("../model/articleSchema");
+const { v4: uuidv4 } = require("uuid");
 
 // Controller function to create a new article
 exports.createArticle = async (req, res) => {
@@ -108,12 +109,10 @@ exports.updateArticle = async (req, res) => {
     );
 
     if (result.nModified === 0) {
-      return res
-        .status(404)
-        .json({
-          success: false,
-          error: "Article not found or no changes made",
-        });
+      return res.status(404).json({
+        success: false,
+        error: "Article not found or no changes made",
+      });
     }
 
     res.status(200).json({ success: true });
@@ -264,5 +263,45 @@ exports.approveArticle = async (req, res) => {
       .json({ success: true, message: "Article status updated to approved" });
   } catch (error) {
     res.status(500).json({ success: false, error: error.message });
+  }
+};
+
+//duplicate article
+exports.duplicateArticle = async (req, res) => {
+  try {
+    const { articleId } = req.params;
+    const article = await Article.findOne({ articleId: articleId }).populate(
+      "userId",
+      "name email"
+    );
+    if (!article) {
+      return res
+        .status(404)
+        .json({ success: false, error: "Article not found" });
+    }
+
+    const newArticleId = article.title + "-" + uuidv4();
+    const newTitle = article.title + " (Copy)";
+
+    const newArticle = new Article({
+      articleId: newArticleId,
+      userId: article.userId,
+      title: newTitle,
+      content: article.content,
+      likes: article.likes,
+      status: article.status,
+      savedType: article.savedType,
+      coverImage: article.coverImage,
+      domain: article.domain,
+      createdAt: new Date(),
+      updatedAt: new Date(),
+    });
+
+    await newArticle.save();
+
+    res.status(201).json({ success: true, article: newArticle });
+  } catch (error) {
+    res.status(500).json({ success: false, error: error.message });
+    console.log("Error duplicating article:", error);
   }
 };
