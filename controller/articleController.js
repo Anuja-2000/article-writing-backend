@@ -211,6 +211,11 @@ exports.getPendingArticles = async (req, res) => {
         },
       },
       {
+        $match: {
+          "userData.0": { $exists: true },
+        },
+      },
+      {
         $sort: {
           updatedAt: -1,
         },
