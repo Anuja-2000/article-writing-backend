@@ -4,7 +4,8 @@ const Article = require("../model/articleSchema");
 // Controller function to create a new article
 exports.createArticle = async (req, res) => {
   try {
-    const { articleId, userId, title, content, savedType, coverImage } = req.body;
+    const { articleId, userId, title, content, savedType, coverImage, domain} =
+      req.body;
 
     const article = new Article({
       articleId,
@@ -12,9 +13,10 @@ exports.createArticle = async (req, res) => {
       title,
       content,
       likes: 0,
-      status: "pending",
+      status: "Not Sent for Approval",
       savedType,
-      coverImage, 
+      coverImage,
+      domain,
     });
 
     await article.save();
@@ -30,6 +32,23 @@ exports.getAllArticles = async (req, res) => {
   try {
     const articles = await Article.find().populate("userId", "name email");
     res.status(200).json({ success: true, articles });
+  } catch (error) {
+    res.status(500).json({ success: false, error: error.message });
+  }
+};
+
+// controller to get the article count by writerId
+exports.getArticleCountByWriterId = async (req, res) => {
+  try {
+    const { writerId } = req.params;
+    const articleCount = await Article.find({ userId: writerId }).count();
+    if (!articleCount) {
+      return res
+        .status(404)
+        .json({ success: false, error: "No articles found for this writer" });
+    }
+
+    res.status(200).json(articleCount);
   } catch (error) {
     res.status(500).json({ success: false, error: error.message });
   }
@@ -71,53 +90,82 @@ exports.getArticleById = async (req, res) => {
 exports.updateArticle = async (req, res) => {
   try {
     const { articleId } = req.params;
-    const {
-      title,
-      content,
-      likes,
-      userId,
-      status,
-      savedType,
-      coverImage,
-      image1,
-      image2,
-      image3,
-      image4,
-      image5,
-      createdAt,
-      updatedAt,
-      domain,
-    } = req.body;
-    const updatedArticle = await Article.updateOne(
-      { articleId },
+    const { title, content, userId } = req.body;
+
+    // Update the article by articleId
+    const result = await Article.updateOne(
+      { articleId: articleId },
       {
-        title: title,
-        content: content,
-        likes: likes,
-        userId: userId,
-        status: status,
-        savedType: savedType,
-        coverImage: coverImage,
-        image1: image1,
-        image2: image2,
-        image3: image3,
-        image4: image4,
-        image5: image5,
-        createdAt: createdAt,
-        updatedAt: new Date(),
-        domain: domain,
+        $set: {
+          title: title,
+          content: content,
+          userId: userId,
+        },
       }
     );
-    if (!updatedArticle) {
+
+    if (result.nModified === 0) {
       return res
         .status(404)
-        .json({ success: false, error: "Article not found" });
+        .json({ success: false, error: "Article not found or no changes made" });
     }
-    res.status(200).json({ success: true, article: updatedArticle });
+
+    res.status(200).json({ success: true });
   } catch (error) {
     res.status(500).json({ success: false, error: error.message });
   }
 };
+
+
+//constroller function to change the article status
+exports.changeArticleStatus = async (req, res) => {
+  try {
+    const { articleId, status } = req.body;
+    const updatedArticle = await Article.updateOne(
+      { articleId: articleId },
+      { $set: { status: status } }
+    );
+
+    console.log(updatedArticle);
+
+    if (updatedArticle.nModified === 0) {
+      return res.status(404).json({
+        success: false,
+        error: "Article not found or no changes made",
+      });
+    }
+
+    res.status(200).json({ success: true });
+  }
+  catch (error) {
+    res.status(500).json({ success: false, error: error.message });
+  }
+};
+
+//constroller function to change the article savedType
+exports.changeArticleSavedType = async (req, res) => {
+  try {
+    const { articleId, savedType } = req.body;
+    const updatedArticle = await Article.updateOne(
+      { articleId: articleId },
+      { $set: { savedType: savedType } }
+    );
+
+    if (updatedArticle.nModified === 0) {
+      return res.status(404).json({
+        success: false,
+        error: "Article not found or no changes made",
+      });
+    }
+
+    res.status(200).json({ success: true });
+  }
+  catch (error) {
+    res.status(500).json({ success: false, error: error.message });
+  }
+};
+
+
 
 // Controller function to delete an article
 exports.deleteArticle = async (req, res) => {
@@ -176,24 +224,48 @@ exports.reportArticle = async (req, res) => {
     const { articleId } = req.params;
     const updatedArticle = await Article.updateOne(
       { articleId: articleId },
-      { $set: { status: 'reported' } }
+      { $set: { status: "reported" } }
     );
 
     if (updatedArticle.nModified === 0) {
-      return res.status(404).json({ success: false, error: 'Article not found or already reported' });
+      return res.status(404).json({
+        success: false,
+        error: "Article not found or already reported",
+      });
     }
 
-    res.status(200).json({ success: true, message: 'Article status updated to reported' });
+    res
+      .status(200)
+      .json({ success: true, message: "Article status updated to reported" });
   } catch (error) {
     res.status(500).json({ success: false, error: error.message });
   }
 };
-exports.getReportedArticles = async (req, res) => {
+
+
+exports.approveArticle = async (req, res) => {
   try {
-    const reportedArticles = await Article.find({ status: 'reported' }).populate("userId", "name email");
-    res.status(200).json({ success: true, reportedArticles });
+    const { articleId } = req.params;
+    const updatedArticle = await Article.updateOne(
+      { articleId: articleId },
+      { $set: { status: "approved" } }
+    );
+
+    if (updatedArticle.nModified === 0) {
+      return res
+        .status(404)
+        .json({
+          success: false,
+          error: "Article not found or already approved",
+        });
+    }
+
+    res
+      .status(200)
+      .json({ success: true, message: "Article status updated to approved" });
   } catch (error) {
     res.status(500).json({ success: false, error: error.message });
   }
 };
+
 

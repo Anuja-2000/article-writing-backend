@@ -23,7 +23,9 @@ const reportedArticle = require('./route/reportedArticleRoute');
 const approvalRoutes = require('./route/articleApprovalRoute');
 const reportedWriter = require('./route/reportedWriterRoute');
 const deactivatedWriter = require('./route/deactivatedWriterRoute');
+const rejectedArticle= require('./route/rejectedArticleRoute');
 const notificationRoute = require('./route/notificationsRoute');
+const articleDomainRoute = require('./route/articleDomainRoute');
 
 const dotenv = require('dotenv');
 dotenv.config();
@@ -62,6 +64,7 @@ app.use('/api/comment', comment);
 app.use('/api/reportArticle', reportedArticle);
 app.use('/api/reportedWriter', reportedWriter);
 app.use('/api/deactivatedWriter', deactivatedWriter);
+app.use('/api/rejectedArticle', rejectedArticle);
 app.use('/api/flaggedTopics', flaggedTopicRoute);
 app.use('/api/article', auth, article)
 app.use('/api/file', fileRoutes)
@@ -70,6 +73,7 @@ app.use('/api/like',likeRoutes)
 app.use('/api/approval', auth, admin, approvalRoutes)
 app.use('/api/notification', notificationRoute);
 app.use('/api/view', viewRoutes)
+app.use('/api/articleDomain',auth, articleDomainRoute);
 
 app.listen(PORT, () => {
   console.log(`listening on port ${PORT}`);
