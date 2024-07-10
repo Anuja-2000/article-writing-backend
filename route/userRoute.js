@@ -15,4 +15,5 @@ router.patch('/deactivateUser/:writerId', userController.deactivateUser);
 router.patch('/activateUser/:writerId', userController.activateUser);
 router.patch('/deactiveUser', userController.deactiveUser);
 router.patch('/restoreUser', auth, admin, userController.restoreUser);
+router.delete('/deleteUser/:writerId', userController.deleteUser);
 module.exports = router;
