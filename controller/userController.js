@@ -475,6 +475,16 @@ const getDeactivedUsers = (req, resp) => {
     });
 }
 
+const deleteUser = (req, resp) => {
+  User.deleteOne({ userId: req.params.writerId })
+    .then((result) => {
+      resp.status(200).json(result);
+    })
+    .catch((error) => {
+      resp.status(500).json(error);
+    });
+};
+
 module.exports = {
   updateUser,
   updateUserImg,
@@ -496,5 +506,6 @@ module.exports = {
   activateUser,
   deactiveUser,
   restoreUser,
-  getDeactivedUsers
+  getDeactivedUsers,
+  deleteUser,
 };
