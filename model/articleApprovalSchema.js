@@ -7,7 +7,7 @@ const ApprovalSchema = new mongoose.Schema({
     approvedAt:{type: Date, require: true,default: Date.now},
 },{ collection: 'articleApprovedBy' });
 
-ApprovalSchema.index({ adminId: 1, articleId: 1 }, { unique: true });
+//ApprovalSchema.index({ adminId: 1, articleId: 1 }, { unique: true });
 
 // Add a virtual property for the formatted time
 

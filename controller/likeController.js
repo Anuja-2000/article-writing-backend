@@ -127,6 +127,30 @@ const searchLikeArticle = (req, resp) => {
     });
 };
 
+const checkLikeArticleExists = (req, resp) => {
+  const { readerId, articleId } = req.params;;
+
+  // Input validation
+  if (!readerId || !articleId) {
+    return resp.status(400).json({ error: "Missing readerId or articleId" });
+  }
+
+  likeWriter
+    .findOne({ readerId, articleId })
+    .then((result) => {
+      if (result) {
+        return resp.status(200).json({ exists: true });
+      } else {
+        return resp.status(200).json({ exists: false });
+      }
+    })
+    .catch((error) => {
+      console.error("Error checking like existence:", error);
+      resp.status(500).json({ error: "Internal server error" });
+    });
+};
+
+
 
 module.exports = {
   saveLikeArticle,
@@ -136,4 +160,5 @@ module.exports = {
   searchLikeArticle,
   deleteLikeArticleById,
   getLikeArticleById,
+  checkLikeArticleExists
 };

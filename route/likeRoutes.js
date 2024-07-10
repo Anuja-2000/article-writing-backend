@@ -18,6 +18,7 @@ router.delete('/delete', likeController.deleteLikeArticle)
 router.delete('/deleteId', likeController.deleteLikeArticleById)
 router.get('/getAll', likeController.getAllLikeArticle)
 router.get('/search', likeController.searchLikeArticle)
+router.get('/isLiked/:readerId/:articleId', likeController.checkLikeArticleExists)
 
 
 module.exports = router;
