@@ -53,8 +53,25 @@ const deleteBlockedArticle = async (req, res) => {
     }
 };
 
+const checkBlockedArticle = async (req, res) => {
+    const { articleId, readerId } = req.params;
+
+    try {
+        const blockedArticle = await BlockedArticle.findOne({ articleId, readerId });
+        if (blockedArticle) {
+            return res.status(200).json(true);
+        } else {
+            return res.status(200).json(false);
+        }
+    } catch (error) {
+        console.error('Error checking blocked article:', error);
+        res.status(500).json({ message: 'Failed to check blocked article', error: error.message });
+    }
+};
+
 module.exports = { 
     saveBlockedArticle,
     getBlockedArticlesByReaderId,
-    deleteBlockedArticle
+    deleteBlockedArticle,
+    checkBlockedArticle
  };
