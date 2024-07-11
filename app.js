@@ -26,7 +26,7 @@ const deactivatedWriter = require('./route/deactivatedWriterRoute');
 const rejectedArticle= require('./route/rejectedArticleRoute');
 const notificationRoute = require('./route/notificationsRoute');
 const articleDomainRoute = require('./route/articleDomainRoute');
-
+const blockedArticleRoute = require('./route/blockedArticleRoute');
 const dotenv = require('dotenv');
 dotenv.config();
 
@@ -38,7 +38,6 @@ app.use(bodyParser.json({ limit: '50mb' }));
 app.use(bodyParser.urlencoded({ limit: '50mb', extended: true }));
 
 var cors = require('cors');
-const flaggedTopicSchema = require("./model/flaggedTopicSchema"); //not used
 app.use(cors());
 
 mongoose.connect(process.env.URI)
@@ -57,14 +56,14 @@ app.use('/api/contactMessage', ContactMessageRoute);
 
 app.use('/api/topicDomains', auth, topicDomainRoute);
 
-app.use('/api/topics', topicRoutes);
+app.use('/api/topics',auth, topicRoutes);
 app.use('/api/keywords', auth, keywordRoutes);
 app.use('/api/readerArticle', readerArticle);
 app.use('/api/comment', comment);
-app.use('/api/reportArticle', reportedArticle);
-app.use('/api/reportedWriter', reportedWriter);
-app.use('/api/deactivatedWriter', deactivatedWriter);
-app.use('/api/rejectedArticle', rejectedArticle);
+app.use('/api/reportArticle', auth, reportedArticle);
+app.use('/api/reportedWriter', auth, reportedWriter);
+app.use('/api/deactivatedWriter', auth, deactivatedWriter);
+app.use('/api/rejectedArticle',auth,  rejectedArticle);
 app.use('/api/flaggedTopics', flaggedTopicRoute);
 app.use('/api/article', auth, article)
 app.use('/api/file', fileRoutes)
@@ -74,6 +73,7 @@ app.use('/api/approval', auth, admin, approvalRoutes)
 app.use('/api/notification', notificationRoute);
 app.use('/api/view', viewRoutes)
 app.use('/api/articleDomain',auth, articleDomainRoute);
+app.use('/api/blockedArticle', blockedArticleRoute);
 
 app.listen(PORT, () => {
   console.log(`listening on port ${PORT}`);
