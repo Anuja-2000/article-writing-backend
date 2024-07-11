@@ -93,7 +93,7 @@ const getPopularArticles = (req, resp) => {
     const limit = 20;
 
     ReaderArticle.find({status: "approved", savedType: "saved" })
-      .sort({ viewCount: -1 })
+      .sort({ viewCount: -1, updatedAt: -1  })
       .limit(limit)
       .then((result) => {
         resp.status(200).json(result);
@@ -164,7 +164,7 @@ const searchReaderArticle = (req, resp) => {
       }
     ],
   })
-    .sort({ viewCount: -1 })
+    .sort({ updatedAt: -1 })
     .then((result) => {
       resp.status(200).json(result);
     })
